@@ -21,12 +21,11 @@ module.exports.routes = {
 
   '/': { view: 'pages/homepage' },
   'GET /blockchain/verify/:ots/:file_hash' : 'BlockchainController.verify',
-  'GET /blockchain/get_block_number/:ots' : 'BlockchainController.getBlockNumber',
-  'GET /blockchain/get_hash/:ots' : 'BlockchainController.getHash',
-  'GET /blockchain/create_account' : 'BlockchainController.createAccount',
+  'GET /account/create' : 'AccountController.create',
+  'GET /account/get_balance/:account' : 'AccountController.getBalance',
 
 
-  'POST /blockchain/send_transaction' : 'BlockchainController.sendTransaction',
+  'POST /transaction/send' : 'TransactionController.send',
   'POST /blockchain/stamp' : 'BlockchainController.stamp',
 
 

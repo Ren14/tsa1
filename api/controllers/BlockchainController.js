@@ -6,6 +6,7 @@
  */
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
+const base64 = require('nodejs-base64-encode');
 const url = sails.config.custom.urlRpc;
 const web3 = new Web3(url);
 const accountAddress = sails.config.custom.accountAddress;
@@ -19,97 +20,127 @@ const contract = new web3.eth.Contract(contractABI, contractAddress);
 
 module.exports = {
   
-  verify : async function (req, res){  	
+  verify : async function (req, res){  
+	  	
+	  	const file_hash = req.params.file_hash;
+	  	const base64_ots = req.params.ots;
 
-	contract.methods.verify(req.params.ots,req.params.file_hash).call({from: accountAddress}, (err, result) => {
-		if(err){
-			return res.json(err)
+	  	// Transformo datos
+	  	const aux_ots = base64.decode(base64_ots.toString(), 'base64');
+	  	var array_ots = aux_ots.split('-');
+	  	
+	  	// OTS definitivo  	
+	  	var permanent_ots;
+
+		if(array_ots.length != 2){
+	  		return res.json('El OTS enviado es inválido');
+	  	}
+	  	
+	  	const ots = array_ots[0]; // Este es el  OpenTimeStamp (OTS) original creado en el método stamp() con el helper getOts(); Es un ID único para cada request.
+	  	const tx_hash = array_ots[1]; // Hash de la TX obtenida de la blockchain
+
+	  	// Verifico si el OTS + Hash enviado son válidos
+		const result_verify = await sails.helpers.verifyHash.with({
+			ots: ots,
+			file_hash: file_hash,
+		});
+
+		
+		if(result_verify){
+
+			const block_number = await sails.helpers.getBlockNumber(ots);
+			
+			return res.json({
+				status : 'success',
+				tx_hash : tx_hash,
+				block_number : block_number,
+				file_hash : file_hash,
+				ots : ots,
+			});
+		} else { // Verifico si la Transacción aún no se ha incluido en un bloque
+			
+			// TODO: Mover la funcion al controlador correspondiente
+			var new_tx_hash = await sails.helpers.getHash(ots);
+			sails.log(new_tx_hash)
+			// Si el 
+			if(tx_hash != new_tx_hash){
+				return res.json({
+					status : 'fail',
+					file_hash_by_ots : new_tx_hash,
+					file_hash_send : file_hash,
+					tx_hash : tx_hash,					
+					ots : ots,
+					msg : 'El HASH del archivo enviado no se corresponde con el OTS.'
+				});	 
+			}
+
+			// Analizar el tema del estado pendiente de las TX
+			/*var tx = await web3.eth.getTransaction(tx_hash, (err, _tx) => {
+		  		if(err){
+					return res.json(err.toString());
+				}
+
+				// Significa que la TX aún no se incluye en un bloque. Notificamos para que intente más tarde			
+				if(!_tx.block_number){
+					return res.json({
+						status : 'pending',
+						tx_hash : tx_hash,					
+						file_hash : file_hash,
+						ots : ots,
+					});			
+				}
+				
+		  	});*/
 		}
-
-		return res.json(result);
-	});
   	
   },
 
   stamp : async function (req, res){
-  	var _ots = req.body.ots;
-  	var _file_hash = req.body.file_hash;
+	  	const file_hash = req.body.file_hash;
+	  	// A partir del Hash recibido, genero el OpenTimeStamp (OTS)
+	  	const ots = await sails.helpers.getOts(file_hash);
+	  	var comprobante_ots;
 
-  	// TODO: antes de stampar el hash recibido, verificar si ya fue estampado anteriormente
+	  	web3.eth.getTransactionCount(accountAddress, (err, txCount) => {
 
-  	web3.eth.getTransactionCount(accountAddress, (err, txCount) => {
+			const data = contract.methods.stamp(ots, file_hash).encodeABI();
 
-		const data = contract.methods.stamp(_ots, _file_hash).encodeABI();
-
-		// Construir la transaccion
-		const txObject = {
-			nonce: web3.utils.toHex(txCount),
-			to: contractAddress,		
-			gasLimit: web3.utils.toHex(800000),
-			gasPrice: web3.utils.toHex(web3.utils.toWei('2000', 'gwei')),
-			data: data
-		}
-
-		// Firmar la transaccion
-		const tx = new Tx(txObject);
-		tx.sign(privateKey);
-
-		const serializeTransaction = tx.serialize();
-		const raw = '0x' + serializeTransaction.toString('hex');
-
-		// Transmitir la transacción
-		web3.eth.sendSignedTransaction(raw, (err, txHash) => {
-			if(err){
-				return res.json(err);
+			// Construir la transaccion
+			const txObject = {
+				nonce: web3.utils.toHex(txCount),
+				to: contractAddress,		
+				gasLimit: web3.utils.toHex(800000),
+				// TODO: revisar que el precio sea automático
+				gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
+				data: data
 			}
 
-			return res.json(txHash);
+			// Firmar la transaccion
+			const tx = new Tx(txObject);
+			tx.sign(privateKey);
+
+			const serializeTransaction = tx.serialize();
+			const raw = '0x' + serializeTransaction.toString('hex');
+
+			// Transmitir la transacción
+			web3.eth.sendSignedTransaction(raw, (err, tx_hash) => {
+				
+				if(err){					
+					return res.json(err.toString());
+				}
+
+				comprobante_ots = ots + '-' + tx_hash;
+
+				// Si está todo bien, retorno el OpenTimeStamp definitivo para luego comprobar si el hash del archivo junto con este comprobante son válidos
+				comprobante_ots = base64.encode(comprobante_ots.toString(), 'base64');
+
+				return res.json({
+					comprobante_ots : comprobante_ots,
+					tx_hash : tx_hash
+				});
+			});
 		});
-	});
+	  
   },
-
-  getBlockNumber : async function (req, res){
-  	var _ots = req.params.ots;
-
-  	contract.methods.getBlockNumber(_ots).call((err, result) => {
-  		if(err){
-			return res.json(err);
-		}
-
-		return res.json(result);
-  	});
-  },
-
-  getHash : async function (req, res){
-  	var _ots = req.params.ots;
-
-  	contract.methods.getHash(_ots).call((err, result) => {
-  		if(err){
-			return res.json(err);
-		}
-
-		return res.json(result);
-  	});
-  },
-
-  createAccount : async function (req, res){
-  	var account_data = web3.eth.accounts.create();
-  	return res.json(account_data);
-  },
-
-  sendTransaction: async function(req, res){
-  	var _from = req.body.from;
-  	var _to = req.body.to;
-  	var _ether = req.body.ether;
-
-  	web3.eth.sendTransaction({ from: _from, to: _to, value: web3.utils.toWei(_ether, 'ether')}, (err, txHash) => {
-		if(err){
-			return res.json(err);
-		}
-
-		return res.json(txHash);
-	});
-  }
-
 };
 
