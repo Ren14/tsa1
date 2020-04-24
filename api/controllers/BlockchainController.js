@@ -39,31 +39,45 @@ module.exports = {
 	  	const ots = array_ots[0]; // Este es el  OpenTimeStamp (OTS) original creado en el método stamp() con el helper getOts(); Es un ID único para cada request.
 	  	const tx_hash = array_ots[1]; // Hash de la TX obtenida de la blockchain
 
-	  	// Verifico si el OTS + Hash enviado son válidos
-		const result_verify = await sails.helpers.verifyHash.with({
-			ots: ots,
-			file_hash: file_hash,
-		});
-
-		
-		if(result_verify){
-
-			const block_number = await sails.helpers.getBlockNumber(ots);
+	  	// Antes de verificar el contenido del OTS y el HASH
+	  	// Verifico el estado de la transacción
+		var tx = await web3.eth.getTransaction(tx_hash, async (err, _tx) => {
+	  		if(err){
+				return res.json(err.toString());
+			}
 			
-			return res.json({
-				status : 'success',
-				tx_hash : tx_hash,
-				block_number : block_number,
-				file_hash : file_hash,
-				ots : ots,
+			// Significa que la TX aún no se incluye en un bloque.
+			if(!_tx.blockNumber){
+				return res.json({
+					status : 'pending',
+					tx_hash : tx_hash,					
+					file_hash : file_hash,
+					ots : ots,
+				});			
+			}
+
+			// Verifico si el OTS + File_Hash enviado son válidos
+			const result_verify = await sails.helpers.verifyHash.with({
+				ots: ots,
+				file_hash: file_hash,
 			});
-		} else { // Verifico si la Transacción aún no se ha incluido en un bloque
+
 			
-			// TODO: Mover la funcion al controlador correspondiente
-			var new_tx_hash = await sails.helpers.getHash(ots);
-			sails.log(new_tx_hash)
-			// Si el 
-			if(tx_hash != new_tx_hash){
+			if(result_verify){
+
+				const block_number = await sails.helpers.getBlockNumber(ots);
+				
+				return res.json({
+					status : 'success',
+					tx_hash : tx_hash,
+					block_number : block_number,
+					file_hash : file_hash,
+					ots : ots,
+				});
+			} else {
+							
+				var new_tx_hash = await sails.helpers.getHash(ots);
+				
 				return res.json({
 					status : 'fail',
 					file_hash_by_ots : new_tx_hash,
@@ -72,26 +86,11 @@ module.exports = {
 					ots : ots,
 					msg : 'El HASH del archivo enviado no se corresponde con el OTS.'
 				});	 
-			}
-
-			// Analizar el tema del estado pendiente de las TX
-			/*var tx = await web3.eth.getTransaction(tx_hash, (err, _tx) => {
-		  		if(err){
-					return res.json(err.toString());
-				}
-
-				// Significa que la TX aún no se incluye en un bloque. Notificamos para que intente más tarde			
-				if(!_tx.block_number){
-					return res.json({
-						status : 'pending',
-						tx_hash : tx_hash,					
-						file_hash : file_hash,
-						ots : ots,
-					});			
-				}
 				
-		  	});*/
-		}
+				
+			}
+			
+	  	});
   	
   },
 
