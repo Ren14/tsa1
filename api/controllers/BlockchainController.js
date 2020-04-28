@@ -21,7 +21,7 @@ const contract = new web3.eth.Contract(contractABI, contractAddress);
 module.exports = {
   
   verify : async function (req, res){  
-	  	
+	  	sails.log("Verify("+req.params.ots+", "+req.params.file_hash+")");
 	  	const file_hash = req.params.file_hash;
 	  	const base64_ots = req.params.ots;
 
@@ -53,6 +53,7 @@ module.exports = {
 					tx_hash : tx_hash,					
 					file_hash : file_hash,
 					ots : ots,
+					msg : 'La Transacción aún no es incluida en un Bloque. Intente nuevamente en unos minutos.'
 				});			
 			}
 
@@ -66,6 +67,9 @@ module.exports = {
 			if(result_verify){
 
 				const block_number = await sails.helpers.getBlockNumber(ots);
+
+				// Tengo que obtener el bloque entero, para sacar su timestamp
+				const block = await sails.helpers.getBlock(block_number);
 				
 				return res.json({
 					status : 'success',
@@ -73,14 +77,17 @@ module.exports = {
 					block_number : block_number,
 					file_hash : file_hash,
 					ots : ots,
+					contract_address: contractAddress,
+					timestamp : block.timestamp,
+					block_hash : block.hash
 				});
 			} else {
 							
-				var new_tx_hash = await sails.helpers.getHash(ots);
+				var file_hash_by_ots = await sails.helpers.getHash(ots);
 				
 				return res.json({
 					status : 'fail',
-					file_hash_by_ots : new_tx_hash,
+					file_hash_by_ots : file_hash_by_ots,
 					file_hash_send : file_hash,
 					tx_hash : tx_hash,					
 					ots : ots,
@@ -95,6 +102,7 @@ module.exports = {
   },
 
   stamp : async function (req, res){
+  		sails.log("Stamp("+req.body.file_hash+")");
 	  	const file_hash = req.body.file_hash;
 	  	// A partir del Hash recibido, genero el OpenTimeStamp (OTS)
 	  	const ots = await sails.helpers.getOts(file_hash);
