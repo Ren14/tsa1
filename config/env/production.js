@@ -251,8 +251,8 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
      onlyAllowOrigins: [
-       'https://tsa-api-rest.herokuapp.com/',
-       'http://tsa-api-rest.herokuapp.com/',
+       'https://tsa-api-rest.herokuapp.com',
+       'http://tsa-api-rest.herokuapp.com',
      ],
 
 
@@ -371,7 +371,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://tsa-api-rest.herokuapp.com/',
+    baseUrl: 'https://tsa-api-rest.herokuapp.com',
     internalEmailAddress: 'support@example.com',
 
     // mailgunDomain: 'mg.example.com',
