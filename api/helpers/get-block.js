@@ -1,6 +1,4 @@
 const Web3 = require('web3');
-const url = sails.config.custom.urlRpc;
-const web3 = new Web3(url);
 
 module.exports = {
 
@@ -16,6 +14,10 @@ module.exports = {
       type: 'number',
       require: true,
     },
+    url : {
+      type : 'string',
+      require : true,
+    },
   },
 
 
@@ -29,6 +31,9 @@ module.exports = {
 
 
   fn: async function (inputs) {
+
+    const url = inputs.url;
+    const web3 = new Web3(url);
 
     var result = await web3.eth.getBlock(inputs.block_number, (err, result) => {
       if(err){

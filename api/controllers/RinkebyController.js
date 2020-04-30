@@ -1,5 +1,5 @@
 /**
- * BlockchainController
+ * Rinkebyontroller
  *
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
@@ -7,13 +7,13 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
 const base64 = require('nodejs-base64-encode');
-const url = sails.config.custom.urlRpcRopsten;
+const url = sails.config.custom.urlRpcRinkeby;
 const web3 = new Web3(url);
-const accountAddress = sails.config.custom.accountAddressRopsten;
-const contractABI = sails.config.custom.contractABIRopsten;
-const contractAddress = sails.config.custom.contractAddressRopsten;
+const accountAddress = sails.config.custom.accountAddressRinkeby;
+const contractABI = sails.config.custom.contractABIRinkeby;
+const contractAddress = sails.config.custom.contractAddressRinkeby;
 const privateKey = Buffer.from(
-  sails.config.custom.privateKeyRopsten,
+  sails.config.custom.privateKeyRinkeby,
   'hex',
 );
 const contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -146,5 +146,24 @@ module.exports = {
 		});
 	  
   },
+
+  createAccount : async function (req, res){
+  	sails.log("createAccount()");
+  	var account_data = web3.eth.accounts.create();
+  	return res.json(account_data);
+  },
+
+  getBalance : async function (req, res){
+  	var account = req.params.account;
+
+  	web3.eth.getBalance(account, (err, bal) => {
+  		if(err){
+  			return res.json(err.toString());
+  		}
+  		var balanceToEther = web3.utils.fromWei(bal, 'ether')
+  		return res.json(balanceToEther);
+  		
+  	});
+  }
 };
 

@@ -13,7 +13,15 @@ module.exports = {
     file_hash : {
       type : 'string',
       required : true
-    }
+    },
+    accountAddress : {
+      type : 'string',
+      require : true,
+    },
+    contractAddress : {
+      type : 'string',
+      require : true,
+    },
   },
 
 
@@ -30,8 +38,8 @@ module.exports = {
 
     var ots;
     const file_hash = inputs.file_hash;
-    const accountAddress = sails.config.custom.accountAddress;
-    const contractAddress = sails.config.custom.contractAddress;
+    const accountAddress = inputs.accountAddress;
+    const contractAddress = inputs.contractAddress;
     const now = new Date();
     const timeStamp = now.getTime();
     

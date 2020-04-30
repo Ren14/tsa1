@@ -24,9 +24,14 @@ module.exports.routes = {
   'GET /account/create' : 'AccountController.create',
   'GET /account/get_balance/:account' : 'AccountController.getBalance',
 
+  'GET /rinkeby/verify/:ots/:file_hash' : 'RinkebyController.verify',
+  'GET /rinkeby/createAccount' : 'RinkebyController.createAccount',
+  'GET /rinkeby/get_balance/:account' : 'RinkebyController.getBalance',
+
 
   'POST /transaction/send' : 'TransactionController.send',
   'POST /blockchain/stamp' : 'BlockchainController.stamp',
+  'POST /rinkeby/stamp' : 'RinkebyController.stamp',
 
 
   /***************************************************************************

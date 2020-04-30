@@ -7,16 +7,16 @@
 
  const Web3 = require('web3');
  const Tx = require('ethereumjs-tx');
- const url = sails.config.custom.urlRpc;
+ const url = sails.config.custom.urlRpcRopsten;
  const web3 = new Web3(url);
- const accountAddress = sails.config.custom.accountAddress;
- const contractABI = sails.config.custom.contractABI;
- const contractAddress = sails.config.custom.contractAddress;
- const privateKey = Buffer.from(
-  sails.config.custom.privateKey,
+ const accountAddressRopsten = sails.config.custom.accountAddressRopsten;
+ const contractABIRopsten = sails.config.custom.contractABIRopsten;
+ const contractAddressRopsten = sails.config.custom.contractAddressRopsten;
+ const privateKeyRopsten = Buffer.from(
+  sails.config.custom.privateKeyRopsten,
   'hex',
   );
- const contract = new web3.eth.Contract(contractABI, contractAddress);
+ const contract = new web3.eth.Contract(contractABIRopsten, contractAddressRopsten);
 
  module.exports = {
 

@@ -1,15 +1,4 @@
 const Web3 = require('web3');
-const Tx = require('ethereumjs-tx');
-const url = sails.config.custom.urlRpc;
-const web3 = new Web3(url);
-const accountAddress = sails.config.custom.accountAddress;
-const contractABI = sails.config.custom.contractABI;
-const contractAddress = sails.config.custom.contractAddress;
-const privateKey = Buffer.from(
-  sails.config.custom.privateKey,
-  'hex',
-);
-const contract = new web3.eth.Contract(contractABI, contractAddress);
 
 module.exports = {
 
@@ -29,7 +18,27 @@ module.exports = {
     file_hash : {
       type : 'string',
       require : true
-    }
+    },
+    url : {
+      type : 'string',
+      require : true,
+    },
+    accountAddress : {
+      type : 'string',
+      require : true,
+    },
+    contractABI : {
+      type : 'ref',
+      require : true,
+    },
+    contractAddress : {
+      type : 'string',
+      require : true,
+    },
+    privateKey : {
+      type : 'ref',
+      require : true,
+    },
   },
 
 
@@ -43,6 +52,16 @@ module.exports = {
 
 
   fn: async function (inputs) {
+    const url = inputs.url;
+    const web3 = new Web3(url);
+    const accountAddress = inputs.accountAddress;
+    const contractABI = inputs.contractABI;
+    const contractAddress = inputs.contractAddress;
+    const privateKey = Buffer.from(
+      inputs.privateKey,
+      'hex',
+    );
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
     
     var result = await contract.methods.verify(inputs.ots,inputs.file_hash).call({from: accountAddress}, (err, result) => {
       if(err){
