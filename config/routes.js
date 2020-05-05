@@ -28,10 +28,20 @@ module.exports.routes = {
   'GET /rinkeby/createAccount' : 'RinkebyController.createAccount',
   'GET /rinkeby/get_balance/:account' : 'RinkebyController.getBalance',
 
+  'GET /bfa/verify/:ots/:file_hash' : 'BfaController.verify',
+  'GET /bfa/createAccount' : 'BfaController.createAccount',
+  'GET /bfa/get_balance/:account' : 'BfaController.getBalance',
+
+  'GET /rsk/verify/:ots/:file_hash' : 'RskController.verify',
+  'GET /rsk/createAccount' : 'RskController.createAccount',
+  'GET /rsk/get_balance/:account' : 'RskController.getBalance',
+
 
   'POST /transaction/send' : 'TransactionController.send',
   'POST /blockchain/stamp' : 'BlockchainController.stamp',
   'POST /rinkeby/stamp' : 'RinkebyController.stamp',
+  'POST /bfa/stamp' : 'BfaController.stamp',
+  'POST /rsk/stamp' : 'RskController.stamp',
 
 
   /***************************************************************************
