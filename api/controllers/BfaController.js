@@ -7,13 +7,13 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
 const base64 = require('nodejs-base64-encode');
-const url = sails.config.custom.urlRpcRopsten;
+const url = sails.config.custom.urlRpcBfa;
 const web3 = new Web3(url);
-const accountAddress = sails.config.custom.accountAddressRopsten;
-const contractABI = sails.config.custom.contractABIRopsten;
-const contractAddress = sails.config.custom.contractAddressRopsten;
+const accountAddress = sails.config.custom.accountAddressBfa;
+const contractABI = sails.config.custom.contractABIBfa;
+const contractAddress = sails.config.custom.contractAddressBfa;
 const privateKey = Buffer.from(
-  sails.config.custom.privateKeyRopsten,
+  sails.config.custom.privateKeyBfa,
   'hex',
 );
 const contract = new web3.eth.Contract(contractABI, contractAddress);
