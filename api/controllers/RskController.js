@@ -7,6 +7,7 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
 const base64 = require('nodejs-base64-encode');
+const axios = require('axios');
 const url = sails.config.custom.urlRpcRsk;
 const web3 = new Web3(url);
 const accountAddress = sails.config.custom.accountAddressRsk;
@@ -156,14 +157,93 @@ module.exports = {
   getBalance : async function (req, res){
   	var account = req.params.account;
 
-  	web3.eth.getBalance(account, (err, bal) => {
+  	web3.eth.getBalance(account,async (err, bal) => {
   		if(err){
   			return res.json(err.toString());
   		}
   		var balanceToEther = web3.utils.fromWei(bal, 'ether')
-  		return res.json(balanceToEther);
+		sails.log("Balance Ether:", balanceToEther);
+  		
+  		// Ahora consulto el Balance de esta criptomoneda expresado en USD
+  		try{
+	        var rbtcToUsd = await sails.helpers.rbtcToUsd(balanceToEther);
+			sails.log("RbtcToUSD:", rbtcToUsd);  			
+  		} catch (e){
+  			throw 'No se pudo obtener la cotización del RBTC';
+  		}
+
+		// Ahora convierto a Pesos
+		try{
+			var usdToArs = await sails.helpers.usdToArs(rbtcToUsd);
+			sails.log("USDToARS:", usdToArs);			
+		} catch (e){
+			throw 'No se pudo obtener la cotización del USD';
+		}
+
+		sails.log("-------------------------------------------------------");
+  		return res.json(usdToArs);
+  		
   		
   	});
-  }
+  },
+
+  send: async function(req, res){
+  	var _from = req.body.from;
+  	var _to = req.body.to;
+  	var _ether = req.body.value_ars;
+  	var private_key = Buffer.from(
+	  req.body.private_key.substr(2),
+	  'hex',
+	);
+  	
+  	// Tengo que convertir el dinero que viene en ARS a USD
+  	try{
+	  	var arsToUsd = await sails.helpers.arsToUsd(_ether);
+	  	sails.log("ArsToUSD:", arsToUsd);  		
+  	} catch (e) {
+  		throw 'No se pudo obtener la cotización del USD';  		
+  	}
+
+  	// Tengo que convertir el dinero USD a ETH
+  	try{
+  		var usdToRbtc = await sails.helpers.usdToRbtc(arsToUsd);
+  		sails.log("USDToRBTC:", usdToRbtc);
+  	} catch (e){
+  		throw 'No se pudo obtener la cotización RBTC';
+  	}
+
+
+  	web3.eth.getTransactionCount(_from, (err, txCount) => {
+  		sails.log("Nonce", txCount);
+		// Construir la transaccion
+		const txObject = {
+			nonce: web3.utils.toHex(txCount),
+			to: _to,		
+			gasLimit: web3.utils.toHex(21000),			
+			gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
+			value: web3.utils.toHex(web3.utils.toWei(usdToRbtc.toString(), "ether")),
+		}
+
+		// Firmar la transaccion
+		const tx = new Tx(txObject);
+		tx.sign(private_key);
+
+		const serializeTransaction = tx.serialize();
+		const raw = '0x' + serializeTransaction.toString('hex');
+
+		// Transmitir la transacción
+		web3.eth.sendSignedTransaction(raw, (err, tx_hash) => {
+			
+			if(err){					
+				return res.json(err.toString());
+			}
+
+			return res.json({			
+				tx_hash : tx_hash
+			});
+		});
+	});
+
+  },
 };
 

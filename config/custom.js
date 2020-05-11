@@ -49,6 +49,13 @@ module.exports.custom = {
   contractABIRsk: [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"SelfDestroy","type":"event"}],
   contractAddressRsk : '0xbdc32baf7ae3b23A87fA87D98364846AE506fdc4',
   privateKeyRsk: 'D305B054E4E6965D92C79F3166D6BEFC07AD9B92CDC48B00FFA7937548974E6D', 
+
+  // Datos Exchanges
+  xCoinApiKey: 'ED4DE42A-9F8D-4631-9ABD-DDC8E159B1F4',
+  openExchangeRatesAppId: '37ec0cc1dccd4564bd4f750ee6364c29',
+
+  // Datos para Cello
+  urlRpcCelo : 'https://alfajores-forno.celo-testnet.org',
   
 };
 
