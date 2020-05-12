@@ -45,7 +45,7 @@ module.exports = {
     payments.push({name: 'rinkeby', enabled: true});
     payments.push({name: 'rsk', enabled: true});
     payments.push({name: 'bfa', enabled: false});
-    payments.push({name: 'celo', enabled: true});
+    payments.push({name: 'celo', enabled: false});
 
     return res.json(payments);
   }

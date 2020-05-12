@@ -235,10 +235,14 @@ module.exports = {
 		web3.eth.sendSignedTransaction(raw, (err, tx_hash) => {
 			
 			if(err){					
-				return res.json(err.toString());
+				return res.json({
+					status: 'error',
+					error: err.toString()
+				});
 			}
 
-			return res.json({			
+			return res.json({
+				status: 'ok',
 				tx_hash : tx_hash
 			});
 		});
