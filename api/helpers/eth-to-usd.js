@@ -27,6 +27,11 @@ module.exports = {
 
 
   fn: async function (inputs) {
+    // TODO: 
+    //- Almacenar el valor obtenido en la BD
+    //- Calcular el tiempo de la última actualización
+    //- Si es más de una hs, actualizar, si no leer y devolver el valor de la BD
+
     var exchangerate = await axios({        
       method : 'GET',
       url : 'https://rest.coinapi.io/v1/exchangerate/ETH/USD',
@@ -40,11 +45,16 @@ module.exports = {
     .catch(err => {
        console.log(err.response.data);
     });
-        
-    sails.log("Tasa de conversion ETH/USD:", exchangerate);
-    
-    var etherToUsd = exchangerate * inputs.eth;
 
+    if(exchangerate){
+      sails.log("Tasa de conversion ETH/USD:", exchangerate);    
+      var etherToUsd = inputs.eth * exchangerate;
+    } else {
+      exchangerate = 190.8182377954368; // Camperiño
+      sails.log("***** Tasa de conversion ETH/USD:", exchangerate);    
+      var etherToUsd = inputs.eth * exchangerate;
+    }
+        
     return etherToUsd;
   }
 

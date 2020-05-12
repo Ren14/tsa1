@@ -40,10 +40,16 @@ module.exports = {
     .catch(err => {
        console.log(err.response.data);
     });
+
+    if(exchangerate){
+      sails.log("Tasa de conversion ETH/USD:", exchangerate);    
+      var usdToEth = inputs.usd / exchangerate;
+    } else {
+      exchangerate = 190.8182377954368; // Camperiño
+      sails.log("***** Tasa de conversion ETH/USD:", exchangerate);    
+      var usdToEth = inputs.usd / exchangerate;
+    }
         
-    sails.log("Tasa de conversion ETH/USD:", exchangerate);
-    
-    var usdToEth = inputs.usd / exchangerate;
 
     return usdToEth;
   }

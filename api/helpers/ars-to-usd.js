@@ -38,11 +38,14 @@ module.exports = {
       console.log(err);
     });
 
-    sails.log("Tasa de conversión USD/ARS:", openexchange);
-
-    // TODO: guardar el último valor en la BD y en caso de fallar el exchange, tomar la cotización de la BD
-
-    var arsToUsd = inputs.ars / openexchange;
+    if(openexchange){
+      sails.log("Tasa de conversión USD/ARS:", openexchange);
+      var arsToUsd = inputs.ars / openexchange;
+    } else {
+      openexchange = 67.4556; // Camperiño
+      sails.log("********Tasa  de conversión USD/ARS:", openexchange);
+      var arsToUsd = inputs.ars / openexchange;
+    }
 
     return arsToUsd;
   }

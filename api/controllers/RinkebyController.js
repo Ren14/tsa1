@@ -184,8 +184,8 @@ module.exports = {
 			throw 'No se pudo obtener la cotización del USD';
 		}
 
-	  		sails.log("-------------------------------------------------------");
-	  		return res.json(usdToArs);
+  		sails.log("-------------------------------------------------------");
+  		return res.json(usdToArs);
 	  		
 	  	});
   },
@@ -197,8 +197,7 @@ module.exports = {
   	var private_key = Buffer.from(
 	  req.body.private_key.substr(2),
 	  'hex',
-	);
-  	
+	);  	
   	
   	// Tengo que convertir el dinero que viene en ARS a USD
   	try{
@@ -214,8 +213,7 @@ module.exports = {
   		sails.log("USDToEth:", usdToEth);	
   	} catch (e){
   		throw 'No se pudo obtener la cotización ETH';
-  	}
-  	
+  	}  	
 
 
   	web3.eth.getTransactionCount(_from, (err, txCount) => {
@@ -240,10 +238,14 @@ module.exports = {
 		web3.eth.sendSignedTransaction(raw, (err, tx_hash) => {
 			
 			if(err){					
-				return res.json(err.toString());
+				return res.json({
+					status: 'error',
+					error: err.toString()
+				});
 			}
 
-			return res.json({			
+			return res.json({
+				status: 'ok',
 				tx_hash : tx_hash
 			});
 		});

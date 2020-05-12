@@ -40,12 +40,17 @@ module.exports = {
     .catch(err => {
        console.log(err.response.data);
     });
-        
-    sails.log("Tasa de conversion ETH/USD:", exchangerate);
-    
-    var rbtcToUsd = inputs.usd / exchangerate;
 
-    return rbtcToUsd;
+    if(exchangerate){
+      sails.log("Tasa de conversion RBTC/USD:", exchangerate);    
+      var usdToRbtc = inputs.usd / exchangerate;
+    } else {
+      exchangerate = 8869.059502279988; // Camperiño
+      sails.log("***** Tasa de conversion RBTC/USD:", exchangerate);    
+      var usdToRbtc = inputs.usd / exchangerate;
+    }
+    
+    return usdToRbtc;
   }
 
 

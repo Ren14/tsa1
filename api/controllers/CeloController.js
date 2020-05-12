@@ -24,7 +24,8 @@ module.exports = {
 
 		let balance = await goldtoken.balanceOf(account)
 		
-		return res.json(balance.toString());
+		sails.log("-------------------------------------------------------");
+		return res.json(balance);
 	},
 
 };
