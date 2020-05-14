@@ -68,6 +68,8 @@ module.exports.routes = {
   'POST /bfa/stamp' : 'BfaController.stamp',
   'POST /bfa/send' : 'BfaController.send',
 
+  'POST /celo/send' : 'CeloController.send',
+
 
   /***************************************************************************
   *                                                                          *
