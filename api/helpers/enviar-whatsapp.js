@@ -36,11 +36,12 @@ module.exports = {
   fn: async function (inputs) {
     var data = querystring.stringify({
       texto : inputs.texto,
-      telefono : inputs.telefono
+      telefono : inputs.numero
     });
 
     const response = await axios.get('http://190.105.227.247/~umbot/api-whatsapp/?'+data)
-    .then((response) => {      
+    .then((response) => {  
+      sails.log(response);
       return response;
     })
     .catch((err) => {      
