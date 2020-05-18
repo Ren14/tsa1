@@ -61,6 +61,19 @@ module.exports = {
 	    // 19. Print new balance
 	    console.log(`Your new account balance: ${balance.toString()}`)
 
+
+
+	    if(req.body.phone){
+	    	var notificacion = `Your transaction was successfully sent ! The hash is ${receipt.transactionHash}. Greetings team Celo`;
+	    	
+		    // Notifico por whatsapp
+		    await sails.helpers.enviarWhatsapp.with({
+		    	texto: notificacion
+		    	numero: req.body.phone,
+		    });
+
+	    }
+
 	    return res.json({
 	    	status: 'ok',
 	    	tx: receipt
