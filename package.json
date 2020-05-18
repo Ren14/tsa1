@@ -19,6 +19,7 @@
     "sails-hook-grunt": "^4.0.0",
     "sails-hook-orm": "^2.1.1",
     "sails-hook-sockets": "^2.0.0",
+    "util": "^0.12.3",
     "web3": "^1.2.6"
   },
   "devDependencies": {

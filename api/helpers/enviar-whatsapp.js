@@ -1,5 +1,6 @@
 const axios = require('axios');
 const querystring = require('querystring'); // Luego modificar envíos por POST 
+const util = require('util');  
 
 module.exports = {
 
