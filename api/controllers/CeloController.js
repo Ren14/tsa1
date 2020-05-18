@@ -65,10 +65,10 @@ module.exports = {
 
 	    if(req.body.phone){
 	    	var notificacion = `Your transaction was successfully sent ! The hash is ${receipt.transactionHash}. Greetings team Celo`;
-	    	
+
 		    // Notifico por whatsapp
 		    await sails.helpers.enviarWhatsapp.with({
-		    	texto: notificacion
+		    	texto: notificacion,
 		    	numero: req.body.phone,
 		    });
 
