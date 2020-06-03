@@ -45,7 +45,7 @@ module.exports = {
 
 	    // 14. Get the Gold Token contract wrapper    
 	    let goldtoken = await kit.contracts.getGoldToken()
-
+	    sails.log("Camperiño")
 	    // 15. Transfer gold from your account to anAddress
 	    let tx = await goldtoken.transfer(to, amount).send({from: from})
 

@@ -193,7 +193,7 @@ module.exports = {
   send: async function(req, res){
   	var _from = req.body.from;
   	var _to = req.body.to;
-  	var _ether = req.body.value_ars;
+  	var _ether = req.body.value;
   	var private_key = Buffer.from(
 	  req.body.private_key.substr(2),
 	  'hex',

@@ -190,7 +190,7 @@ module.exports = {
   send: async function(req, res){
   	var _from = req.body.from;
   	var _to = req.body.to;
-  	var _ether = req.body.value_ars;
+  	var _ether = req.body.value;
   	var private_key = Buffer.from(
 	  req.body.private_key.substr(2),
 	  'hex',
@@ -221,7 +221,7 @@ module.exports = {
 			to: _to,		
 			gasLimit: web3.utils.toHex(21000),			
 			gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
-			value: web3.utils.toHex(web3.utils.toWei(usdToRbtc.toString(), "ether")),
+			value: web3.utils.toHex(web3.utils.toWei(usdToRbtc.toString().substring(0, 16), "ether")),
 		}
 
 		// Firmar la transaccion
