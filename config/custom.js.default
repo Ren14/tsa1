@@ -1,0 +1,61 @@
+/**
+ * Custom configuration
+ * (sails.config.custom)
+ *
+ * One-off settings specific to your application.
+ *
+ * For more information on custom configuration, visit:
+ * https://sailsjs.com/config/custom
+ */
+
+module.exports.custom = {
+
+  /***************************************************************************
+  *                                                                          *
+  * Any other custom config this Sails app should use during development.    *
+  *                                                                          *
+  ***************************************************************************/
+  // mailgunDomain: 'transactional-mail.example.com',
+  // mailgunSecret: 'key-testkeyb183848139913858e8abd9a3',
+  // stripeSecret: 'sk_test_Zzd814nldl91104qor5911gjald',
+  // …
+
+  //Datos para Ropsten 
+  urlRpcRopsten: 'https://ropsten.infura.io/v3/xxxxxx', // Obtener los datos públicos por medio de la aplicación web INFURA
+  accountAddressRopsten : '0x59060CF376DeB6729da45C729EbecC171C2c16b9',
+  contractABIRopsten : [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"SelfDestroy","type":"event"}],
+  contractAddressRopsten: '0x96a716f91da961639f685100b12d13ef30ba89dc',
+  privateKeyRopsten: 'xxxxx',  // Esto se podría definir en variables de entorno, pero aún no lo hago.
+  
+
+  //Datos para Rinkeby
+  urlRpcRinkeby: 'https://rinkeby.infura.io/v3/xxxxxxx', // Obtener los datos públicos por medio de la aplicación web INFURA
+  accountAddressRinkeby : '0xFA2BE13EcF2774e574Dfb640b3510ffe2Fe0C131',
+  contractABIRinkeby : [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"SelfDestroy","type":"event"}],
+  contractAddressRinkeby: '0xffD8331172E17227B553F91eA98142d9a5739bb8',
+  privateKeyRinkeby: 'xxxxxxx',
+
+
+  //Datos para Blockchain Federal Argentina
+  urlRpcBfa: 'http://localhost:8545',
+  accountAddressBfa : '0x95f970b5292416aeFf396C67C18Cd6D8c7502FE4',
+  contractABIBfa : [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"}],"name":"SelfDestroy","type":"event"}],
+  contractAddressBfa : '0x15F914649A5F18fEb3F114b0295165E713a888e4',
+  privateKeyBfa : '',
+  
+  // Datos para RSK Testnet
+  urlRpcRsk: 'https://public-node.testnet.rsk.co:443',
+  accountAddressRsk: '0x96ebd986592a14D46Cd674F5d91aCb61eD48b572',
+  contractABIRsk: [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"}],"name":"SelfDestroy","type":"event"}],
+  contractAddressRsk : '0xbdc32baf7ae3b23A87fA87D98364846AE506fdc4',
+  privateKeyRsk: 'xxxxxx', 
+
+  // Datos Exchanges, sirve para hacer conversiones de criptos a dolar y pesos ars
+  xCoinApiKey: 'x',
+  openExchangeRatesAppId: 'x',
+
+  // Datos para Cello
+  urlRpcCelo : 'https://alfajores-forno.celo-testnet.org',
+  
+};
+
