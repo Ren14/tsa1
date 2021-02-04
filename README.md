@@ -18,6 +18,7 @@ Npm
 
 * Descargar el repositorio e ingresar 
 ```
+sudo git clone https://github.com/Ren14/tsa1.git
 cd [nombre_repo]
 ```
 
