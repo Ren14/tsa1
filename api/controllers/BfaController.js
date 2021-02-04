@@ -113,9 +113,9 @@ module.exports = {
 			const txObject = {
 				nonce: web3.utils.toHex(txCount),
 				to: contractAddress,		
-				gasLimit: web3.utils.toHex(800000),
+				gas: 2000000,
 				// TODO: revisar que el precio sea automático
-				gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
+				//gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
 				data: data
 			}
 

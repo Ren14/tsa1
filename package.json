@@ -12,6 +12,7 @@
     "grunt": "1.0.4",
     "js-sha256": "^0.9.0",
     "nodejs-base64-encode": "^1.1.0",
+    "nodemon": "^2.0.3",
     "sails": "^1.2.3",
     "sails-hook-grunt": "^4.0.0",
     "sails-hook-orm": "^2.1.1",

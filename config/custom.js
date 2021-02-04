@@ -40,8 +40,8 @@ module.exports.custom = {
   urlRpcBfa: 'http://localhost:8545',
   accountAddressBfa : '0x95f970b5292416aeFf396C67C18Cd6D8c7502FE4',
   contractABIBfa : [{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"}],"name":"getBlockNumber","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"verify","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"selfDestroy","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ots","type":"string"},{"name":"file_hash","type":"string"}],"name":"stamp","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"},{"indexed":true,"name":"hash","type":"string"},{"indexed":true,"name":"ots","type":"string"}],"name":"Stamped","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"}],"name":"Deploy","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"accountAddress"}],"name":"SelfDestroy","type":"event"}],
-  contractAddressBfa : '0x7CBF323520D6fdA0858B85dc357dB6143fbE997B',
-  privateKeyBfa : '2e0ec7a84ef4ba3ac5b839e468bbc82f06da4bfbef58d6213452c0b5ec54ef25', 
+  contractAddressBfa : '0x15F914649A5F18fEb3F114b0295165E713a888e4',
+  privateKeyBfa : '3ec09e073b2ac35ad99a903074122d36bab976e650a23f63ceb756a2d6c19a6a', 
   
   // Datos para RSK Testnet
   urlRpcRsk: 'https://public-node.testnet.rsk.co:443',
