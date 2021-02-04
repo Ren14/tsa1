@@ -7,6 +7,7 @@
 const Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
 const base64 = require('nodejs-base64-encode');
+const axios = require('axios');
 const url = sails.config.custom.urlRpcRinkeby;
 const web3 = new Web3(url);
 const accountAddress = sails.config.custom.accountAddressRinkeby;
@@ -148,22 +149,108 @@ module.exports = {
   },
 
   createAccount : async function (req, res){
-  	sails.log("createAccount()");
-  	var account_data = web3.eth.accounts.create();
-  	return res.json(account_data);
+	  	sails.log("createAccount()");
+	  	try{
+	  		var account_data = web3.eth.accounts.create();
+	  	} catch (e){
+	  		throw 'No se pudo crear la cuenta';
+	  	}
+	  	return res.json(account_data);
   },
 
   getBalance : async function (req, res){
-  	var account = req.params.account;
+	  	var account = req.params.account;
 
-  	web3.eth.getBalance(account, (err, bal) => {
-  		if(err){
-  			return res.json(err.toString());
+	  	web3.eth.getBalance(account,async (err, bal) => {
+	  		if(err){
+	  			return res.json(err.toString());
+	  		}
+	  		var balanceToEther = web3.utils.fromWei(bal, 'ether')
+			sails.log("Balance Ether:", balanceToEther);		
+
+	  		// Ahora consulto el Balance de esta criptomoneda expresado en USD
+  		try{
+			var etherToUsd = await sails.helpers.ethToUsd(balanceToEther);
+			sails.log("EtherToUSD:", etherToUsd);  			
+  		} catch (e){
+  			throw 'No se pudo obtener la cotización del ETH';
   		}
-  		var balanceToEther = web3.utils.fromWei(bal, 'ether')
-  		return res.json(balanceToEther);
-  		
-  	});
-  }
+		
+		// Ahora convierto a Pesos
+		try{
+	  		var usdToArs = await sails.helpers.usdToArs(etherToUsd);
+			sails.log("USDToARS:", usdToArs);			
+		} catch (e) {
+			throw 'No se pudo obtener la cotización del USD';
+		}
+
+  		sails.log("-------------------------------------------------------");
+  		return res.json(usdToArs);
+	  		
+	  	});
+  },
+
+  send: async function(req, res){
+  	var _from = req.body.from;
+  	var _to = req.body.to;
+  	var _ether = req.body.value;
+  	var private_key = Buffer.from(
+	  req.body.private_key.substr(2),
+	  'hex',
+	);  	
+  	
+  	// Tengo que convertir el dinero que viene en ARS a USD
+  	try{
+	  	var arsToUsd = await sails.helpers.arsToUsd(_ether);
+	  	sails.log("ArsToUSD:", arsToUsd);  		
+  	} catch (e){
+  		throw 'No se pudo obtener la cotización del USD';
+  	}
+
+  	// Tengo que convertir el dinero USD a ETH
+  	try{
+  		var usdToEth = await sails.helpers.usdToEth(arsToUsd);
+  		sails.log("USDToEth:", usdToEth);	
+  	} catch (e){
+  		throw 'No se pudo obtener la cotización ETH';
+  	}  	
+
+
+  	web3.eth.getTransactionCount(_from, (err, txCount) => {
+  		sails.log("Nonce", txCount);
+		// Construir la transaccion
+		const txObject = {
+			nonce: web3.utils.toHex(txCount),
+			to: _to,		
+			gasLimit: web3.utils.toHex(21000),			
+			gasPrice: web3.utils.toHex(web3.utils.toWei('1000', 'gwei')),
+			value: web3.utils.toHex(web3.utils.toWei(usdToEth.toString(), "ether")),
+		}
+
+		// Firmar la transaccion
+		const tx = new Tx(txObject);
+		tx.sign(private_key);
+
+		const serializeTransaction = tx.serialize();
+		const raw = '0x' + serializeTransaction.toString('hex');
+
+		// Transmitir la transacción
+		web3.eth.sendSignedTransaction(raw, (err, tx_hash) => {
+			
+			if(err){					
+				return res.json({
+					status: 'error',
+					error: err.toString()
+				});
+			}
+
+			return res.json({
+				status: 'ok',
+				tx_hash : tx_hash
+			});
+		});
+	});
+
+  },
 };
 

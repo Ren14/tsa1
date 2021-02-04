@@ -35,6 +35,19 @@ module.exports = {
   		return res.json(balanceToEther);
   		
   	});
+  },
+
+  // Son las blockchain con las que trabajamos desde la API REST
+  getPayments : async function(req, res){
+    var payments = [];
+
+    payments.push({name: 'ropsten', enabled: true});
+    payments.push({name: 'rinkeby', enabled: true});
+    payments.push({name: 'rsk', enabled: true});
+    payments.push({name: 'bfa', enabled: false});
+    payments.push({name: 'celo', enabled: true});
+
+    return res.json(payments);
   }
 
 };

@@ -20,28 +20,55 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': { view: 'pages/homepage' },
-  'GET /blockchain/verify/:ots/:file_hash' : 'BlockchainController.verify',
-  'GET /account/create' : 'AccountController.create',
-  'GET /account/get_balance/:account' : 'AccountController.getBalance',
+  //////////////////////////////////////
+  /////////// GET   ////////////////////
+  //////////////////////////////////////
 
+  // Metodos de ROPSTEN
+  'GET /ropsten/verify/:ots/:file_hash' : 'BlockchainController.verify',
+  'GET /ropsten/create_account' : 'BlockchainController.createAccount',
+  'GET /ropsten/get_balance/:account' : 'BlockchainController.getBalance',
+  
+  // Metodos de RINKEBY
   'GET /rinkeby/verify/:ots/:file_hash' : 'RinkebyController.verify',
-  'GET /rinkeby/createAccount' : 'RinkebyController.createAccount',
-  'GET /rinkeby/get_balance/:account' : 'RinkebyController.getBalance',
+  'GET /rinkeby/create_account' : 'RinkebyController.createAccount',
+  'GET /rinkeby/get_balance/:account' : 'RinkebyController.getBalance',  
 
+  // Metodos de BFA
   'GET /bfa/verify/:ots/:file_hash' : 'BfaController.verify',
-  'GET /bfa/createAccount' : 'BfaController.createAccount',
+  'GET /bfa/create_account' : 'BfaController.createAccount',
   'GET /bfa/get_balance/:account' : 'BfaController.getBalance',
 
+  // Metodos de RSK
   'GET /rsk/verify/:ots/:file_hash' : 'RskController.verify',
-  'GET /rsk/createAccount' : 'RskController.createAccount',
-  'GET /rsk/get_balance/:account' : 'RskController.getBalance',
+  'GET /rsk/create_account' : 'RskController.createAccount',
+  'GET /rsk/get_balance/:account' : 'RskController.getBalance',  
 
+  // Metodos de Celo
+  //'GET /rsk/verify/:ots/:file_hash' : 'RskController.verify',
+  'GET /celo/create_account' : 'CeloController.createAccount',
+  'GET /celo/get_balance/:account' : 'CeloController.getBalance',  
 
-  'POST /transaction/send' : 'TransactionController.send',
-  'POST /blockchain/stamp' : 'BlockchainController.stamp',
+  // METODOS VARIOS
+  'GET /accounts/get_payments' : 'AccountController.getPayments',
+
+  //////////////////////////////////////
+  ///////////  POST ////////////////////
+  //////////////////////////////////////
+  
+  'POST /ropsten/stamp' : 'BlockchainController.stamp',
+  'POST /ropsten/send' : 'BlockchainController.send',
+
   'POST /rinkeby/stamp' : 'RinkebyController.stamp',
-  'POST /bfa/stamp' : 'BfaController.stamp',
+  'POST /rinkeby/send' : 'RinkebyController.send',
+  
   'POST /rsk/stamp' : 'RskController.stamp',
+  'POST /rsk/send' : 'RskController.send',
+  
+  'POST /bfa/stamp' : 'BfaController.stamp',
+  'POST /bfa/send' : 'BfaController.send',
+
+  'POST /celo/send' : 'CeloController.send',
 
 
   /***************************************************************************
