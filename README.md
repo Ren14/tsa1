@@ -3,10 +3,11 @@
 Esta aplicación está basada en el proyecto de Patricio Kumagae https://gitlab.bfa.ar/pkumagae/TsaAPI que está desarrollado con Python. La aplicación fue re escrita en **NodeJS** utilizando el framework de desarrollo **SailsJS**. 
 
 Permite interactuar con el smartContract https://gitlab.bfa.ar/pkumagae/SmartContractsOTS/blob/master/ProofOfExistence.sol que está deployado en:
-**Ropsten**
-**Rinkeby**
-**Rsk**
-**Blockchain Federal Argentina**
+
+- **Ropsten**
+- **Rinkeby**
+- **Rsk**
+- **Blockchain Federal Argentina**
 
 En el archivo custom/config.js.default se encuentran las direcciones y ABI del contrato deployado en cada blockchain mencionada.
 
